@@ -149,9 +149,8 @@ input:focus-visible, textarea:focus-visible, .btn:focus-visible, .link:focus-vis
         <p class="err" id="err" hidden>Add your name so Geely knows who the request is from.</p>
         <div class="actions">
           <a class="btn primary" id="send" href="#">Send email</a>
-          <button type="button" class="btn ghost" id="copy-all">Copy email text</button>
         </div>
-        <p class="note">Send opens your mail app with the email ready to go. If nothing opens, use Copy email text and paste it into a new message to the addresses on the right. </p>
+        <p class="note">Send opens your mail app with the email ready to go. If nothing opens, use the copy links under the email to paste it into a new message. </p>
       </form>
 
     <aside class="mail" aria-label="Email preview">
@@ -271,8 +270,6 @@ function copy(text, label, fallbackNode) {
     navigator.clipboard.writeText(text).then(() => toast(label + " copied"), fail);
   } catch (_) { fail(); }
 }
-$("copy-all").addEventListener("click", () =>
-  copy("To: " + TO.join(", ") + "\nSubject: " + SUBJECT + "\n\n" + composeText(values()), "Email", $("body")));
 $("copy-to").addEventListener("click", () => copy(TO.join(", "), "Addresses", $("to")));
 $("copy-subj").addEventListener("click", () => copy(SUBJECT, "Subject", $("subj")));
 $("copy-body").addEventListener("click", () => copy(composeText(values()), "Body", $("body")));
