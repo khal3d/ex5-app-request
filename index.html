@@ -158,11 +158,13 @@ input:focus-visible, textarea:focus-visible, .btn:focus-visible, .link:focus-vis
     <aside class="mail" aria-label="Email preview">
       <div class="mail-head">
         <div class="mh-row"><span>To</span><div class="chips" id="to"></div></div>
+        <div class="mh-row"><span>Cc</span><div class="chips" id="cc"></div></div>
         <div class="mh-row"><span>Subject</span><div class="subject" id="subj"></div></div>
       </div>
       <div class="mail-body" id="body"></div>
       <div class="mail-foot">
-        <button type="button" class="link" id="copy-to">Copy addresses</button>
+        <button type="button" class="link" id="copy-to">Copy To</button>
+        <button type="button" class="link" id="copy-cc">Copy Cc</button>
         <button type="button" class="link" id="copy-subj">Copy subject</button>
         <button type="button" class="link" id="copy-body">Copy body</button>
         <span class="toast" id="toast" role="status"></span>
@@ -178,6 +180,15 @@ const TO = [
   "geely.global.pr@geely.com",
   "zhu.eddie@geely.com",
   "yuming.yang2@geely.com"
+];
+const CC = [
+  "khosny@aboughalymotors.com",
+  "tamerkotb@aboughalymotors.com",
+  "mostafa.aboughaly@aboughalymotors.com",
+  "mohamed.elattar@aboughalymotors.com",
+  "ahmed.halabi@geelyeg.com",
+  "sherif.tarkhan@aboughalymotors.com",
+  "muhammad.alzuhairy@aboughalymotors.com"
 ];
 const SUBJECT = "Request to Enable Geely App Connectivity for EX5 EM-i in Egypt";
 const BODY = `Dear Geely Global Team and Geely Egypt Team,
@@ -224,7 +235,8 @@ function render() {
   const v = values();
   $("body").innerHTML = esc(BODY) + "\n\nBest regards,\n<mark>" + esc(signature(v)) + "</mark>";
   const href = "mailto:" + TO.join(",") +
-    "?subject=" + encodeURIComponent(SUBJECT) +
+    "?cc=" + CC.join(",") +
+    "&subject=" + encodeURIComponent(SUBJECT) +
     "&body=" + encodeURIComponent(composeText(v));
   $("send").href = href;
 
@@ -236,6 +248,7 @@ function render() {
 }
 
 $("to").innerHTML = TO.map(a => `<span class="chip">${a}</span>`).join("");
+$("cc").innerHTML = CC.map(a => `<span class="chip">${a}</span>`).join("");
 $("subj").textContent = SUBJECT;
 
 Object.values(els).forEach(el => el.addEventListener("input", render));
@@ -272,7 +285,8 @@ function copy(text, label, fallbackNode) {
     navigator.clipboard.writeText(text).then(() => toast(label + " copied"), fail);
   } catch (_) { fail(); }
 }
-$("copy-to").addEventListener("click", () => copy(TO.join(", "), "Addresses", $("to")));
+$("copy-to").addEventListener("click", () => copy(TO.join(", "), "To addresses", $("to")));
+$("copy-cc").addEventListener("click", () => copy(CC.join(", "), "Cc addresses", $("cc")));
 $("copy-subj").addEventListener("click", () => copy(SUBJECT, "Subject", $("subj")));
 $("copy-body").addEventListener("click", () => copy(composeText(values()), "Body", $("body")));
 
